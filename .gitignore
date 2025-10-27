@@ -42,3 +42,7 @@ flask_session/
 
 # Backend session files
 backend/flask_session/
+
+
+# md files
+*.md
