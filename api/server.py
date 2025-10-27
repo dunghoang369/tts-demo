@@ -23,7 +23,11 @@ security = HTTPBearer(auto_error=False)
 # Update with specific domain after deployment
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Update with your Vercel domain after deployment
+    allow_origins=[
+        "https://tts-demo-vjz2.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:3000",
+    ],  # Update with your Vercel domain after deployment
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -213,4 +217,3 @@ async def health():
 
 # Vercel serverless function handler
 handler = app
-
