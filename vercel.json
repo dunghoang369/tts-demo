@@ -7,21 +7,26 @@
       "config": {
         "distDir": "dist"
       }
+    },
+    {
+      "src": "api/server.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb"
+      }
     }
   ],
-  "functions": {
-    "api/**/*.py": {
-      "runtime": "python3.9"
-    }
-  },
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/server.py"
+      "dest": "api/server.py"
+    },
+    {
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/index.html"
     }
   ]
 }
