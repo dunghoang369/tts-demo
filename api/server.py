@@ -5,7 +5,6 @@ from pydantic import BaseModel
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional
-from mangum import Mangum
 import os
 
 app = FastAPI(title="TTS Authentication API")
@@ -223,10 +222,9 @@ async def test():
 
 
 # Vercel serverless function handler using Mangum
-# Create the handler instance for Vercel
-mangum_handler = Mangum(app, lifespan="off")
-
-# Export for Vercel
+# Export for Vercel - create handler inside function to avoid module-level inspection
 def handler(event, context):
     """Vercel serverless function entry point"""
-    return mangum_handler(event, context)
+    from mangum import Mangum
+    asgi_handler = Mangum(app, lifespan="off")
+    return asgi_handler(event, context)
