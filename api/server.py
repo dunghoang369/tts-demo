@@ -223,4 +223,10 @@ async def test():
 
 
 # Vercel serverless function handler using Mangum
-handler = Mangum(app)
+# Create the handler instance for Vercel
+mangum_handler = Mangum(app, lifespan="off")
+
+# Export for Vercel
+def handler(event, context):
+    """Vercel serverless function entry point"""
+    return mangum_handler(event, context)
