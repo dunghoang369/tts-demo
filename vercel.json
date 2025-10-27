@@ -16,13 +16,11 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/server.py"
+      "dest": "api/server.py"
     },
     {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "$1"
     }
   ]
 }
-
-

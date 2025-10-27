@@ -6,6 +6,7 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional
 import os
+from mangum import Mangum
 
 app = FastAPI(title="TTS Authentication API")
 
