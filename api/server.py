@@ -211,5 +211,16 @@ async def health():
     return HealthResponse(status="ok")
 
 
+@app.get("/api/test")
+async def test():
+    """Simple test endpoint to verify API is working"""
+    return {
+        "message": "API is working!",
+        "environment": "production" if os.getenv("VERCEL") else "development",
+        "jwt_key_set": bool(os.getenv("JWT_SECRET_KEY")),
+        "allowed_domain": ALLOWED_DOMAIN
+    }
+
+
 # Vercel serverless function handler using Mangum
 handler = Mangum(app)
