@@ -221,10 +221,6 @@ async def test():
     }
 
 
-# Vercel serverless function handler using Mangum
-# Export for Vercel - create handler inside function to avoid module-level inspection
-def handler(event, context):
-    """Vercel serverless function entry point"""
-    from mangum import Mangum
-    asgi_handler = Mangum(app, lifespan="off")
-    return asgi_handler(event, context)
+# Vercel serverless handler - Use ASGI interface directly
+app_handler = app
+
