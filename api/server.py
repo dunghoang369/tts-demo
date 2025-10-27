@@ -218,7 +218,7 @@ async def test():
         "message": "API is working!",
         "environment": "production" if os.getenv("VERCEL") else "development",
         "jwt_key_set": bool(os.getenv("JWT_SECRET_KEY")),
-        "allowed_domain": ALLOWED_DOMAIN
+        "allowed_domain": ALLOWED_DOMAIN,
     }
 
 
