@@ -5,8 +5,8 @@ from pydantic import BaseModel
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional
-import os
 from mangum import Mangum
+import os
 
 app = FastAPI(title="TTS Authentication API")
 
@@ -20,15 +20,10 @@ ACCESS_TOKEN_EXPIRE_HOURS = 24
 # Security
 security = HTTPBearer(auto_error=False)
 
-# CORS configuration - allow all origins for Vercel deployment
-# Update with specific domain after deployment
+# CORS configuration - allow all origins for flexible deployment
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://tts-demo-vjz2.vercel.app",
-        "http://localhost:5173",
-        "http://localhost:3000",
-    ],  # Update with your Vercel domain after deployment
+    allow_origins=["*"],  # Allow all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -216,5 +211,5 @@ async def health():
     return HealthResponse(status="ok")
 
 
-# Vercel serverless function handler
-handler = app
+# Vercel serverless function handler using Mangum
+handler = Mangum(app)
