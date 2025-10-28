@@ -87,7 +87,7 @@ function Login({ onLogin }) {
           </button>
         </form>
 
-        <div className="login-footer">
+        {/* <div className="login-footer">
           <p className="demo-credentials">
             <strong>Demo Credentials:</strong><br />
             <span className="credential-section">Username:</span><br />
@@ -97,7 +97,7 @@ function Login({ onLogin }) {
             admin@namisense.ai / admin123<br />
             user@namisense.ai / password123
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
