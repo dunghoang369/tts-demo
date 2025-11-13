@@ -14,11 +14,10 @@
 export async function synthesize(text, voice, model, rate, returnType, audioFormat) {
   console.log('TTS API called with:', { text, voice, model, rate, returnType, audioFormat });
   
-  // New API endpoint
-  const API_URL = 'http://115.79.192.192:19977/invocations';
-  const API_KEY = 'zNBVyiatKn5eTvC2CEvDg1msgOCHrTZ55zZ0qfsu';
+  // Use backend proxy instead of calling external API directly
+  const API_URL = '/api/tts/synthesize';
   
-  // Build JSON body for the real API
+  // Build JSON body for the TTS API
   const requestBody = {
     content: text,
     rate: parseFloat(rate) || 1.0,
@@ -31,12 +30,10 @@ export async function synthesize(text, voice, model, rate, returnType, audioForm
   console.log('Request body:', requestBody);
   
   try {
-    // Call real TTS API with POST
+    // Call backend proxy with POST
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
-        'accept': 'application/json',
-        'api-key': API_KEY,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(requestBody)

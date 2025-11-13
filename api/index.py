@@ -1,5 +1,6 @@
-from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi import FastAPI, HTTPException, Depends, status, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 from jose import JWTError, jwt
@@ -219,6 +220,46 @@ async def test():
         "jwt_key_set": bool(os.getenv("JWT_SECRET_KEY")),
         "allowed_domain": ALLOWED_DOMAIN,
     }
+
+
+@app.post("/api/tts/synthesize")
+async def tts_synthesize(request: Request):
+    """Proxy TTS requests to external API to avoid mixed content issues"""
+    import httpx
+    
+    try:
+        # Get request body from frontend
+        body = await request.json()
+        
+        # Forward to external TTS API
+        API_URL = 'http://115.79.192.192:19977/invocations'
+        API_KEY = 'zNBVyiatKn5eTvC2CEvDg1msgOCHrTZ55zZ0qfsu'
+        
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.post(
+                API_URL,
+                json=body,
+                headers={
+                    'accept': 'application/json',
+                    'api-key': API_KEY,
+                    'Content-Type': 'application/json'
+                }
+            )
+            
+            if response.status_code != 200:
+                return JSONResponse(
+                    status_code=response.status_code,
+                    content={"error": "TTS API error", "details": response.text}
+                )
+            
+            # Return the JSON response from TTS API
+            return JSONResponse(content=response.json())
+            
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": "Proxy error", "message": str(e)}
+        )
 
 
 # Vercel serverless handler - Use ASGI interface directly
