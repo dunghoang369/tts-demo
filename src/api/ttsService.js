@@ -55,7 +55,7 @@ export async function synthesize(text, voice, model, rate, returnType, audioForm
       console.log('API Response status:', data.status, data.description);
       
       // Extract the base64 waveform from the response
-      const base64Waveform = data.waveform;
+      const base64Waveform = data.audio;
       
       if (!base64Waveform) {
         console.error('Response data:', data);
