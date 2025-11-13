@@ -30,25 +30,50 @@ export async function synthesize(text, voice, model, rate, returnType, audioForm
   
   console.log('Request body:', requestBody);
   
-  // Call real TTS API with POST
-  const response = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      'accept': 'application/json',
-      'api-key': API_KEY,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(requestBody)
-  });
-  
-  if (!response.ok) {
-    throw new Error(`TTS API failed: ${response.status}`);
+  try {
+    // Call real TTS API with POST
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'api-key': API_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('API Error:', response.status, errorText);
+      throw new Error(`TTS API failed: ${response.status} - ${errorText}`);
+    }
+    
+    // Handle different return types
+    if (returnType === 'url') {
+      // API returns JSON with URL
+      const data = await response.json();
+      console.log('API Response:', data);
+      
+      // Extract the audio URL from the response
+      const audioUrl = data.url || data.audio_url || data.result;
+      
+      if (!audioUrl) {
+        console.error('Response data:', data);
+        throw new Error('No audio URL in response');
+      }
+      
+      // Return the URL directly (or fetch it if needed)
+      return { audioUrl, blob: null };
+    } else {
+      // return_type is 'file' - returns audio blob directly
+      const blob = await response.blob();
+      const audioUrl = URL.createObjectURL(blob);
+      return { audioUrl, blob };
+    }
+  } catch (error) {
+    console.error('Synthesis error:', error);
+    throw error;
   }
-  
-  const blob = await response.blob();
-  const audioUrl = URL.createObjectURL(blob);
-  
-  return { audioUrl, blob };
 }
 
 /**
