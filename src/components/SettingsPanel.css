@@ -109,6 +109,52 @@
   border-radius: 8px;
 }
 
+/* Select Dropdown */
+.setting-select {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--input-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-color);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  outline: none;
+}
+
+.setting-select:hover {
+  border-color: rgba(124, 92, 255, 0.3);
+  background: rgba(124, 92, 255, 0.05);
+}
+
+.setting-select:focus {
+  border-color: var(--accent-color);
+  background: rgba(124, 92, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.1);
+}
+
+.setting-select option {
+  padding: 12px 8px;
+  background-color: #2a2a2a;
+  color: var(--text-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.setting-select option:hover {
+  background-color: #3a3a3a;
+}
+
+.setting-select option:checked {
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+  color: white;
+  font-weight: 600;
+}
+
 /* Voice Selector */
 .voice-selector {
   display: grid;

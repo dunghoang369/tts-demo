@@ -1,5 +1,5 @@
 // Vietnamese TTS API Service
-// Integrated with https://aft.namisense.ai/tts/offline
+// Integrated with http://115.79.192.192:19977/invocations
 
 /**
  * Synthesizes speech from text using the specified voice, model, rate, return type, and audio format
@@ -14,18 +14,32 @@
 export async function synthesize(text, voice, model, rate, returnType, audioFormat) {
   console.log('TTS API called with:', { text, voice, model, rate, returnType, audioFormat });
   
-  // Build query parameters for the real API
-  const params = new URLSearchParams({
+  // New API endpoint
+  const API_URL = 'http://115.79.192.192:19977/invocations';
+  const API_KEY = 'zNBVyiatKn5eTvC2CEvDg1msgOCHrTZ55zZ0qfsu';
+  
+  // Build JSON body for the real API
+  const requestBody = {
     content: text,
-    accent: voice || '01_hannah',
-    sample_rate: model || '16000',
-    rate: rate || '1.0',
+    rate: parseFloat(rate) || 1.0,
+    sample_rate: parseInt(model) || 16000,
+    accent: parseInt(voice) || 1,
     return_type: returnType || 'url',
     audio_format: audioFormat || 'wav'
-  });
+  };
   
-  // Call real TTS API
-  const response = await fetch(`https://aft.namisense.ai/tts/offline?${params}`);
+  console.log('Request body:', requestBody);
+  
+  // Call real TTS API with POST
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'accept': 'application/json',
+      'api-key': API_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(requestBody)
+  });
   
   if (!response.ok) {
     throw new Error(`TTS API failed: ${response.status}`);
@@ -63,15 +77,15 @@ export async function getVoices() {
   
   // Return Vietnamese voices available from the TTS API
   return [
-    { id: '01_hannah', name: 'Hannah (Nữ miền Nam - Vi - Chất lượng thấp)' },
-    { id: '02_thuthuy', name: 'Thu Thuỷ (Nữ miền Bắc - Vi - Chất lượng thấp)' },
-    { id: '03_kimchi', name: 'Kim Chi (Nữ miền Bắc - Vi)' },
-    { id: '04_hongphuong', name: 'Hồng Phượng (Nữ miền Bắc - Vi)' },
-    { id: '05_phuonganh', name: 'Phương Anh (Nữ miền Nam - Vi)' },
-    { id: '06_sonlong', name: 'Sơn Long (Nam miền bắc - Vi)' },
-    { id: '07_camtu', name: 'Cẩm Tú (Nữ miền Trung - Vi)' },
-    { id: '08_hongphuc', name: 'Hồng Phúc (Nam miền Nam - Vi)' },
-    { id: '09_ljspeech', name: 'LJSpeech (Nữ - En - Thử nghiệm)' }
+    { id: '1', name: 'Hannah (Nữ miền Nam - Vi - Chất lượng thấp)' },
+    { id: '2', name: 'Thu Thuỷ (Nữ miền Bắc - Vi - Chất lượng thấp)' },
+    { id: '3', name: 'Kim Chi (Nữ miền Bắc - Vi)' },
+    { id: '4', name: 'Hồng Phượng (Nữ miền Bắc - Vi)' },
+    { id: '5', name: 'Phương Anh (Nữ miền Nam - Vi)' },
+    { id: '6', name: 'Sơn Long (Nam miền bắc - Vi)' },
+    { id: '7', name: 'Cẩm Tú (Nữ miền Trung - Vi)' },
+    { id: '8', name: 'Hồng Phúc (Nam miền Nam - Vi)' },
+    { id: '9', name: 'LJSpeech (Nữ - En - Thử nghiệm)' }
   ];
 }
 
