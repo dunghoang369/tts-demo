@@ -2,23 +2,26 @@
 // Integrated with https://aft.namisense.ai/tts/offline
 
 /**
- * Synthesizes speech from text using the specified voice, model, and rate
+ * Synthesizes speech from text using the specified voice, model, rate, return type, and audio format
  * @param {string} text - The text to convert to speech
  * @param {string} voice - The voice ID to use
  * @param {string} model - The model ID to use
  * @param {string} rate - The speed of the speech
+ * @param {string} returnType - The return type (url or file)
+ * @param {string} audioFormat - The audio format (wav or mp3)
  * @returns {Promise<{audioUrl: string, blob: Blob}>} - Audio URL and blob
  */
-export async function synthesize(text, voice, model, rate) {
-  console.log('TTS API called with:', { text, voice, model, rate });
+export async function synthesize(text, voice, model, rate, returnType, audioFormat) {
+  console.log('TTS API called with:', { text, voice, model, rate, returnType, audioFormat });
   
   // Build query parameters for the real API
   const params = new URLSearchParams({
-    text: text,
+    content: text,
     accent: voice || '01_hannah',
     sample_rate: model || '16000',
-    audio_format: 'wav',
-    rate: rate || '1.0'
+    rate: rate || '1.0',
+    return_type: returnType || 'url',
+    audio_format: audioFormat || 'wav'
   });
   
   // Call real TTS API
@@ -43,12 +46,11 @@ export async function getRates() {
   
   // Return available speech rates for the TTS API
   return [
-    { id: '0.5', name: '0.5x (Very Slow)' },
-    { id: '0.75', name: '0.75x (Slow)' },
+    { id: '0.8', name: '0.8x (Very Slow)' },
+    { id: '0.9', name: '0.9x (Slow)' },
     { id: '1.0', name: '1.0x (Normal)' },
-    { id: '1.25', name: '1.25x (Fast)' },
-    { id: '1.5', name: '1.5x (Very Fast)' },
-    { id: '2.0', name: '2.0x (Ultra Fast)' }
+    { id: '1.1', name: '1.1x (Fast)' },
+    { id: '1.2', name: '1.2x (Very Fast)' },
   ];
 }
 
@@ -89,4 +91,30 @@ export async function getModels() {
   ];
 }
 
+/**
+ * Fetch available return types
+ * @returns {Promise<Array<{id: string, name: string}>>}
+ */
+export async function getReturnTypes() {
+  console.log('getReturnTypes API called');
+  
+  // Return available return types for the TTS API
+  return [
+    { id: 'url', name: 'URL' },
+    { id: 'file', name: 'File' }
+  ];
+}
 
+/**
+ * Fetch available audio formats
+ * @returns {Promise<Array<{id: string, name: string}>>}
+ */
+export async function getAudioFormats() {
+  console.log('getAudioFormats API called');
+  
+  // Return available audio formats for the TTS API
+  return [
+    { id: 'wav', name: 'WAV' },
+    { id: 'mp3', name: 'MP3' }
+  ];
+}

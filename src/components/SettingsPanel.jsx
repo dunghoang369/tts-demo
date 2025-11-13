@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getVoices, getModels, getRates } from '../api/ttsService';
+import { getVoices, getModels, getRates, getReturnTypes, getAudioFormats } from '../api/ttsService';
 import './SettingsPanel.css';
 
 function SettingsPanel({ 
@@ -8,11 +8,17 @@ function SettingsPanel({
   model, 
   setModel,
   rate,
-  setRate
+  setRate,
+  returnType,
+  setReturnType,
+  audioFormat,
+  setAudioFormat
 }) {
   const [voices, setVoices] = useState([]);
   const [models, setModels] = useState([]);
   const [rates, setRates] = useState([]);
+  const [returnTypes, setReturnTypes] = useState([]);
+  const [audioFormats, setAudioFormats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('settings');
 
@@ -23,15 +29,19 @@ function SettingsPanel({
   const loadVoicesAndModels = async () => {
     try {
       setLoading(true);
-      const [voicesData, modelsData, ratesData] = await Promise.all([
+      const [voicesData, modelsData, ratesData, returnTypesData, audioFormatsData] = await Promise.all([
         getVoices(),
         getModels(),
-        getRates()
+        getRates(),
+        getReturnTypes(),
+        getAudioFormats()
       ]);
       
       setVoices(voicesData);
       setModels(modelsData);
       setRates(ratesData);
+      setReturnTypes(returnTypesData);
+      setAudioFormats(audioFormatsData);
       
       // Set default selections
       if (voicesData.length > 0 && !voice) {
@@ -42,6 +52,12 @@ function SettingsPanel({
       }
       if (ratesData.length > 0 && !rate) {
         setRate('1.0');
+      }
+      if (returnTypesData.length > 0 && !returnType) {
+        setReturnType('url');
+      }
+      if (audioFormatsData.length > 0 && !audioFormat) {
+        setAudioFormat('wav');
       }
     } catch (error) {
       console.error('Failed to load voices and models:', error);
@@ -126,6 +142,48 @@ function SettingsPanel({
                 {rates.map((r) => (
                   <option key={r.id} value={r.id}>
                     {r.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+
+          {/* Return Type Selection */}
+          <div className="setting-group">
+            <label className="setting-label">Return Type</label>
+            {loading ? (
+              <div className="loading-placeholder">Loading...</div>
+            ) : (
+              <select
+                id="returntype-select"
+                className="setting-select"
+                value={returnType}
+                onChange={(e) => setReturnType(e.target.value)}
+              >
+                {returnTypes.map((rt) => (
+                  <option key={rt.id} value={rt.id}>
+                    {rt.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+
+          {/* Audio Format Selection */}
+          <div className="setting-group">
+            <label className="setting-label">Audio Format</label>
+            {loading ? (
+              <div className="loading-placeholder">Loading...</div>
+            ) : (
+              <select
+                id="audioformat-select"
+                className="setting-select"
+                value={audioFormat}
+                onChange={(e) => setAudioFormat(e.target.value)}
+              >
+                {audioFormats.map((af) => (
+                  <option key={af.id} value={af.id}>
+                    {af.name}
                   </option>
                 ))}
               </select>

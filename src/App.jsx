@@ -10,12 +10,14 @@ function App() {
   const [voice, setVoice] = useState('');
   const [model, setModel] = useState('');
   const [rate, setRate] = useState('1.0');
+  const [returnType, setReturnType] = useState('url');
+  const [audioFormat, setAudioFormat] = useState('wav');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSynthesize = async (text) => {
     try {
       setIsLoading(true);
-      const { audioUrl } = await synthesize(text, voice, model, rate);
+      const { audioUrl } = await synthesize(text, voice, model, rate, returnType, audioFormat);
       return audioUrl;
     } catch (error) {
       console.error('Synthesis failed:', error);
@@ -63,6 +65,10 @@ function App() {
             setModel={setModel}
             rate={rate}
             setRate={setRate}
+            returnType={returnType}
+            setReturnType={setReturnType}
+            audioFormat={audioFormat}
+            setAudioFormat={setAudioFormat}
           />
         </aside>
       </main>
