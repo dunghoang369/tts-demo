@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
-import { getVoices, getModels } from '../api/ttsService';
+import { getVoices, getModels, getRates } from '../api/ttsService';
 import './SettingsPanel.css';
 
 function SettingsPanel({ 
   voice, 
   setVoice, 
   model, 
-  setModel
+  setModel,
+  rate,
+  setRate
 }) {
   const [voices, setVoices] = useState([]);
   const [models, setModels] = useState([]);
+  const [rates, setRates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('settings');
 
@@ -20,13 +23,15 @@ function SettingsPanel({
   const loadVoicesAndModels = async () => {
     try {
       setLoading(true);
-      const [voicesData, modelsData] = await Promise.all([
+      const [voicesData, modelsData, ratesData] = await Promise.all([
         getVoices(),
-        getModels()
+        getModels(),
+        getRates()
       ]);
       
       setVoices(voicesData);
       setModels(modelsData);
+      setRates(ratesData);
       
       // Set default selections
       if (voicesData.length > 0 && !voice) {
@@ -34,6 +39,9 @@ function SettingsPanel({
       }
       if (modelsData.length > 0 && !model) {
         setModel(modelsData[0].id);
+      }
+      if (ratesData.length > 0 && !rate) {
+        setRate('1.0');
       }
     } catch (error) {
       console.error('Failed to load voices and models:', error);
@@ -97,6 +105,27 @@ function SettingsPanel({
                 {models.map((m) => (
                   <option key={m.id} value={m.id}>
                     {m.name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+
+          {/* Rate Selection */}
+          <div className="setting-group">
+            <label className="setting-label">Speed</label>
+            {loading ? (
+              <div className="loading-placeholder">Loading rates...</div>
+            ) : (
+              <select
+                id="rate-select"
+                className="setting-select"
+                value={rate}
+                onChange={(e) => setRate(e.target.value)}
+              >
+                {rates.map((r) => (
+                  <option key={r.id} value={r.id}>
+                    {r.name}
                   </option>
                 ))}
               </select>

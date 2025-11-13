@@ -9,12 +9,13 @@ function App() {
   const { user, logout } = useAuth();
   const [voice, setVoice] = useState('');
   const [model, setModel] = useState('');
+  const [rate, setRate] = useState('1.0');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSynthesize = async (text) => {
     try {
       setIsLoading(true);
-      const { audioUrl } = await synthesize(text, voice, model);
+      const { audioUrl } = await synthesize(text, voice, model, rate);
       return audioUrl;
     } catch (error) {
       console.error('Synthesis failed:', error);
@@ -60,6 +61,8 @@ function App() {
             setVoice={setVoice}
             model={model}
             setModel={setModel}
+            rate={rate}
+            setRate={setRate}
           />
         </aside>
       </main>
