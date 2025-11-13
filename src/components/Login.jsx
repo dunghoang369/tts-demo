@@ -86,18 +86,6 @@ function Login({ onLogin }) {
             {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
-
-        {/* <div className="login-footer">
-          <p className="demo-credentials">
-            <strong>Demo Credentials:</strong><br />
-            <span className="credential-section">Username:</span><br />
-            admin / admin123<br />
-            demo / demo123<br />
-            <span className="credential-section">Email (@namisense.ai):</span><br />
-            admin@namisense.ai / admin123<br />
-            user@namisense.ai / password123
-          </p>
-        </div> */}
       </div>
     </div>
   );
