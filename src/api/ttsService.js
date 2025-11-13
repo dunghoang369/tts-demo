@@ -50,20 +50,29 @@ export async function synthesize(text, voice, model, rate, returnType, audioForm
     
     // Handle different return types
     if (returnType === 'url') {
-      // API returns JSON with URL
+      // API returns JSON with base64-encoded waveform
       const data = await response.json();
-      console.log('API Response:', data);
+      console.log('API Response status:', data.status, data.description);
       
-      // Extract the audio URL from the response
-      const audioUrl = data.url || data.audio_url || data.result;
+      // Extract the base64 waveform from the response
+      const base64Waveform = data.waveform;
       
-      if (!audioUrl) {
+      if (!base64Waveform) {
         console.error('Response data:', data);
-        throw new Error('No audio URL in response');
+        throw new Error('No waveform data in response');
       }
       
-      // Return the URL directly (or fetch it if needed)
-      return { audioUrl, blob: null };
+      // Convert base64 to binary
+      const binaryString = atob(base64Waveform);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      
+      // Create blob from binary data
+      const blob = new Blob([bytes], { type: `audio/${audioFormat}` });
+      const audioUrl = URL.createObjectURL(blob);
+      return { audioUrl, blob };
     } else {
       // return_type is 'file' - returns audio blob directly
       const blob = await response.blob();
