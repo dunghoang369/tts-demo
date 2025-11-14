@@ -226,42 +226,40 @@ async def test():
 async def tts_synthesize(request: Request):
     """Proxy TTS requests to external API to avoid mixed content issues"""
     import httpx
-    
+
     try:
         # Get request body from frontend
         body = await request.json()
-        
+
         # Forward to external TTS API
-        API_URL = 'http://115.79.192.192:19977/invocations'
-        API_KEY = 'zNBVyiatKn5eTvC2CEvDg1msgOCHrTZ55zZ0qfsu'
-        
+        API_URL = "http://115.79.192.192:19977/invocations"
+        API_KEY = "zNBVyiatKn5eTvC2CEvDg1msgOCHrTZ55zZ0qfsu"
+
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.post(
                 API_URL,
                 json=body,
                 headers={
-                    'accept': 'application/json',
-                    'api-key': API_KEY,
-                    'Content-Type': 'application/json'
-                }
+                    "accept": "application/json",
+                    "api-key": API_KEY,
+                    "Content-Type": "application/json",
+                },
             )
-            
+
             if response.status_code != 200:
                 return JSONResponse(
                     status_code=response.status_code,
-                    content={"error": "TTS API error", "details": response.text}
+                    content={"error": "TTS API error", "details": response.text},
                 )
-            
+
             # Return the JSON response from TTS API
             return JSONResponse(content=response.json())
-            
+
     except Exception as e:
         return JSONResponse(
-            status_code=500,
-            content={"error": "Proxy error", "message": str(e)}
+            status_code=500, content={"error": "Proxy error", "message": str(e)}
         )
 
 
 # Vercel serverless handler - Use ASGI interface directly
 app_handler = app
-

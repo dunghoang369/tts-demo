@@ -57,32 +57,32 @@ function TextEditor({ onSynthesize, isLoading }) {
   const quickStartExamples = [
     {
       icon: '📖',
-      label: 'Narrate a story',
+      label: 'Kể lại một câu chuyện',
       text: "Anh đã nói rằng sẽ luôn ở bên em. Nhưng khi mọi thứ sụp đổ, khi em quay lại tìm kiếm một bờ vai… anh ở đâu? Thành phố này đã nghiền nát em, còn anh chỉ đứng nhìn, nhấm nháp ly latte nửa cà phê nửa sữa của mình."
     },
     {
       icon: '😄',
-      label: 'Tell a silly joke',
+      label: 'kể lại một câu chuyện cười',
       text: "Tại sao các nhà khoa học không tin vào nguyên tử? Vì chúng tạo ra mọi thứ! Và nói về việc tạo ra mọi thứ, có bạn đã nghe về nhà toán học đang sợ các số âm chưa? Anh ấy sẽ dừng lại ở bất cứ điều gì để tránh chúng!"
     },
     {
       icon: '🎙️',
-      label: 'Record an advertisement',
+      label: 'Đọc một đoạn quảng cáo',
       text: "Đây là điện thoại thông minh mới nhất - SmartPhone Pro Max Ultra - nơi sự sáng tạo gặp điểm với sự hoàn hảo. Với màn hình sắc nét và hiển thị rõ ràng, hiệu suất nhanh chóng và camera chụp ảnh với độ phân giải cao, có sẵn ngay tại cửa hàng gần nhất của bạn."
     },
     {
       icon: '🌍',
-      label: 'Speak in different languages',
+      label: 'Nói bằng các ngôn ngữ khác nhau',
       text: "Xin chào, tôi là Rachel. Bonjour, je m'appelle Rachel. Hola, me llamo Rachel. Ciao, mi chiamo Rachel. こんにちは、私の名前はレイチェルです。"
     },
     {
       icon: '🎬',
-      label: 'Direct a dramatic movie scene',
+      label: 'Đọc lời thoại trong một đoạn phim điện ảnh',
       text: "Cơn mưa trút xuống như những giọt lệ từ thiên đường, khi cô đứng ở mép bến tàu, nhìn chằm chằm vào màn đêm. “Em chưa bao giờ muốn mọi chuyện kết thúc như thế này,” cô thì thầm, giọng nghẹn lại. Nhưng đại dương vẫn giữ kín những bí mật của nó — lặng im và lạnh lùng."
     },
     {
       icon: '🧘',
-      label: 'Guide a meditation class',
+      label: 'Hướng dẫn một lớp tập thể dục',
       text: "Hít vào sâu... và thở ra từ từ. Cảm nhận sự thoải mái rời khỏi cơ thể với mỗi hít ra. Bạn yên tĩnh. Bạn ở giữa. Bạn yên bình. Để tâm trí bay nhẹ như lá bèo trên hồ yên lặng."
     }
   ];
