@@ -116,7 +116,8 @@ export async function getVoices() {
     { id: '6', name: 'Sơn Long (Nam miền bắc - Vi)' },
     { id: '7', name: 'Cẩm Tú (Nữ miền Trung - Vi)' },
     { id: '8', name: 'Hồng Phúc (Nam miền Nam - Vi)' },
-    { id: '9', name: 'LJSpeech (Nữ - En - Thử nghiệm)' }
+    { id: '9', name: 'LJSpeech (Nữ - En - Thử nghiệm)' },
+    { id: '10', name: 'Ngọc Bích (Nữ miền Bắc - Vi)' }
   ];
 }
 
