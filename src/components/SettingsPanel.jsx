@@ -130,6 +130,48 @@ function SettingsPanel({
             </select>
           )}
         </div>
+
+        {/* Return Type Selection */}
+        <div className="setting-group">
+          <label className="setting-label">Return Type</label>
+          {loading ? (
+            <div className="loading-placeholder">Loading...</div>
+          ) : (
+            <select
+              id="returntype-select"
+              className="setting-select"
+              value={returnType}
+              onChange={(e) => setReturnType(e.target.value)}
+            >
+              {returnTypes.map((rt) => (
+                <option key={rt.id} value={rt.id}>
+                  {rt.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        {/* Audio Format Selection */}
+        <div className="setting-group">
+          <label className="setting-label">Audio Format</label>
+          {loading ? (
+            <div className="loading-placeholder">Loading...</div>
+          ) : (
+            <select
+              id="audioformat-select"
+              className="setting-select"
+              value={audioFormat}
+              onChange={(e) => setAudioFormat(e.target.value)}
+            >
+              {audioFormats.map((af) => (
+                <option key={af.id} value={af.id}>
+                  {af.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
       </div>
     </div>
   );
