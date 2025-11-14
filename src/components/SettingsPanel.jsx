@@ -20,7 +20,6 @@ function SettingsPanel({
   const [returnTypes, setReturnTypes] = useState([]);
   const [audioFormats, setAudioFormats] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('settings');
 
   useEffect(() => {
     loadVoicesAndModels();
@@ -68,136 +67,70 @@ function SettingsPanel({
 
   return (
     <div className="settings-panel">
-      <div className="settings-tabs">
-        <button 
-          className={`tab ${activeTab === 'settings' ? 'active' : ''}`}
-          onClick={() => setActiveTab('settings')}
-        >
-          Settings
-        </button>
-        <button 
-          className={`tab ${activeTab === 'history' ? 'active' : ''}`}
-          onClick={() => setActiveTab('history')}
-        >
-          History
-        </button>
+      <div className="settings-content">
+        {/* Voice Selection */}
+        <div className="setting-group">
+          <label className="setting-label">Voice</label>
+          {loading ? (
+            <div className="loading-placeholder">Loading voices...</div>
+          ) : (
+            <select
+              id="voice-select"
+              className="setting-select"
+              value={voice}
+              onChange={(e) => setVoice(e.target.value)}
+            >
+              {voices.map((v) => (
+                <option key={v.id} value={v.id}>
+                  {v.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        {/* Model Selection */}
+        <div className="setting-group">
+          <label className="setting-label">Model</label>
+          {loading ? (
+            <div className="loading-placeholder">Loading models...</div>
+          ) : (
+            <select
+              id="model-select"
+              className="setting-select"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+            >
+              {models.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        {/* Rate Selection */}
+        <div className="setting-group">
+          <label className="setting-label">Speed</label>
+          {loading ? (
+            <div className="loading-placeholder">Loading rates...</div>
+          ) : (
+            <select
+              id="rate-select"
+              className="setting-select"
+              value={rate}
+              onChange={(e) => setRate(e.target.value)}
+            >
+              {rates.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
       </div>
-
-      {activeTab === 'settings' ? (
-        <div className="settings-content">
-          {/* Voice Selection */}
-          <div className="setting-group">
-            <label className="setting-label">Voice</label>
-            {loading ? (
-              <div className="loading-placeholder">Loading voices...</div>
-            ) : (
-              <select
-                id="voice-select"
-                className="setting-select"
-                value={voice}
-                onChange={(e) => setVoice(e.target.value)}
-              >
-                {voices.map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {v.name}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-
-          {/* Model Selection */}
-          <div className="setting-group">
-            <label className="setting-label">Model</label>
-            {loading ? (
-              <div className="loading-placeholder">Loading models...</div>
-            ) : (
-              <select
-                id="model-select"
-                className="setting-select"
-                value={model}
-                onChange={(e) => setModel(e.target.value)}
-              >
-                {models.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.name}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-
-          {/* Rate Selection */}
-          <div className="setting-group">
-            <label className="setting-label">Speed</label>
-            {loading ? (
-              <div className="loading-placeholder">Loading rates...</div>
-            ) : (
-              <select
-                id="rate-select"
-                className="setting-select"
-                value={rate}
-                onChange={(e) => setRate(e.target.value)}
-              >
-                {rates.map((r) => (
-                  <option key={r.id} value={r.id}>
-                    {r.name}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-
-          {/* Return Type Selection */}
-          <div className="setting-group">
-            <label className="setting-label">Return Type</label>
-            {loading ? (
-              <div className="loading-placeholder">Loading...</div>
-            ) : (
-              <select
-                id="returntype-select"
-                className="setting-select"
-                value={returnType}
-                onChange={(e) => setReturnType(e.target.value)}
-              >
-                {returnTypes.map((rt) => (
-                  <option key={rt.id} value={rt.id}>
-                    {rt.name}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-
-          {/* Audio Format Selection */}
-          <div className="setting-group">
-            <label className="setting-label">Audio Format</label>
-            {loading ? (
-              <div className="loading-placeholder">Loading...</div>
-            ) : (
-              <select
-                id="audioformat-select"
-                className="setting-select"
-                value={audioFormat}
-                onChange={(e) => setAudioFormat(e.target.value)}
-              >
-                {audioFormats.map((af) => (
-                  <option key={af.id} value={af.id}>
-                    {af.name}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-        </div>
-      ) : (
-        <div className="history-content">
-          <div className="empty-state">
-            <p>No history yet</p>
-            <p className="empty-state-subtitle">Your generated audio will appear here</p>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
