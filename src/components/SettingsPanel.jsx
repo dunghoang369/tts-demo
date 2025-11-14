@@ -47,7 +47,7 @@ function SettingsPanel({
         setVoice(voicesData[0].id);
       }
       if (modelsData.length > 0 && !model) {
-        setModel(modelsData[0].id);
+        setModel('22050');
       }
       if (ratesData.length > 0 && !rate) {
         setRate('1.0');
