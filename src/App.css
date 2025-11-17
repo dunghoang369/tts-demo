@@ -28,6 +28,37 @@
   justify-content: space-between;
 }
 
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.section-dropdown {
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color);
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 150px;
+  text-align: center;
+}
+
+.section-dropdown:hover {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.section-dropdown:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.2);
+}
+
 .brand {
   display: flex;
   align-items: center;

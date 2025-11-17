@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import TextEditor from './components/TextEditor'
 import SettingsPanel from './components/SettingsPanel'
+import News from './components/News'
 import { synthesize } from './api/ttsService'
 import { useAuth } from './context/AuthContext'
 import './App.css'
 
 function App() {
   const { user, logout } = useAuth();
+  const [currentSection, setCurrentSection] = useState('tts');
   const [voice, setVoice] = useState('');
   const [model, setModel] = useState('');
   const [rate, setRate] = useState('1.0');
@@ -41,6 +43,16 @@ function App() {
           <span className="logo">🔊</span>
           <h1 className="title">Text to Speech</h1>
         </div>
+        <div className="header-center">
+          <select 
+            className="section-dropdown"
+            value={currentSection}
+            onChange={(e) => setCurrentSection(e.target.value)}
+          >
+            <option value="tts">TTS</option>
+            <option value="news">News</option>
+          </select>
+        </div>
         <div className="user-section">
           <span className="username">👤 {user?.email || user?.username}</span>
           <button onClick={handleLogout} className="logout-button">
@@ -49,29 +61,33 @@ function App() {
         </div>
       </header>
 
-      <main className="main-layout">
-        <div className="editor-section">
-          <TextEditor 
-            onSynthesize={handleSynthesize}
-            isLoading={isLoading}
-          />
-        </div>
-        
-        <aside className="settings-section">
-          <SettingsPanel 
-            voice={voice}
-            setVoice={setVoice}
-            model={model}
-            setModel={setModel}
-            rate={rate}
-            setRate={setRate}
-            returnType={returnType}
-            setReturnType={setReturnType}
-            audioFormat={audioFormat}
-            setAudioFormat={setAudioFormat}
-          />
-        </aside>
-      </main>
+      {currentSection === 'tts' ? (
+        <main className="main-layout">
+          <div className="editor-section">
+            <TextEditor 
+              onSynthesize={handleSynthesize}
+              isLoading={isLoading}
+            />
+          </div>
+          
+          <aside className="settings-section">
+            <SettingsPanel 
+              voice={voice}
+              setVoice={setVoice}
+              model={model}
+              setModel={setModel}
+              rate={rate}
+              setRate={setRate}
+              returnType={returnType}
+              setReturnType={setReturnType}
+              audioFormat={audioFormat}
+              setAudioFormat={setAudioFormat}
+            />
+          </aside>
+        </main>
+      ) : (
+        <News />
+      )}
     </div>
   )
 }
