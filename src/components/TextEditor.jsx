@@ -1,11 +1,26 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './TextEditor.css';
 
-function TextEditor({ onSynthesize, isLoading }) {
+function TextEditor({ onSynthesize, isLoading, externalText, onTextChange }) {
   const [text, setText] = useState('Xin chào, tôi là trợ lý ảo. Hôm nay tôi sẽ giúp bạn chuyển đổi văn bản thành giọng nói tiếng Việt.');
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+
+  // Update text when externalText prop changes
+  useEffect(() => {
+    if (externalText !== undefined && externalText !== null) {
+      setText(externalText);
+    }
+  }, [externalText]);
+
+  // Notify parent when text changes
+  const handleTextChange = (newText) => {
+    setText(newText);
+    if (onTextChange) {
+      onTextChange(newText);
+    }
+  };
 
   const handleSpeak = async () => {
     if (!text.trim()) {
@@ -46,7 +61,7 @@ function TextEditor({ onSynthesize, isLoading }) {
   };
 
   const handleClear = () => {
-    setText('');
+    handleTextChange('');
   };
 
   const handleAudioEnded = () => {
@@ -88,7 +103,7 @@ function TextEditor({ onSynthesize, isLoading }) {
   ];
 
   const handleQuickStart = (exampleText) => {
-    setText(exampleText);
+    handleTextChange(exampleText);
   };
 
   return (
@@ -96,7 +111,7 @@ function TextEditor({ onSynthesize, isLoading }) {
       <textarea
         className="text-input"
         value={text}
-        onChange={(e) => setText(e.target.value)}
+        onChange={(e) => handleTextChange(e.target.value)}
         placeholder="Type or paste text to synthesize..."
         disabled={isLoading}
       />

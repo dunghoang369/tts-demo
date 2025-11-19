@@ -12,7 +12,9 @@ function SettingsPanel({
   returnType,
   setReturnType,
   audioFormat,
-  setAudioFormat
+  setAudioFormat,
+  maxWordPerSent,
+  setMaxWordPerSent
 }) {
   const [voices, setVoices] = useState([]);
   const [models, setModels] = useState([]);
@@ -150,6 +152,27 @@ function SettingsPanel({
               ))}
             </select>
           )}
+        </div>
+
+        {/* Max Words Per Sentence Slider */}
+        <div className="setting-group">
+          <label className="setting-label">
+            Max Words Per Sentence: {maxWordPerSent}
+          </label>
+          <input
+            type="range"
+            id="max-word-slider"
+            className="setting-slider"
+            min="10"
+            max="500"
+            step="10"
+            value={maxWordPerSent}
+            onChange={(e) => setMaxWordPerSent(parseInt(e.target.value))}
+          />
+          <div className="slider-labels">
+            <span>10</span>
+            <span>500</span>
+          </div>
         </div>
       </div>
     </div>

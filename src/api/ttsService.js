@@ -2,17 +2,18 @@
 // Integrated with http://115.79.192.192:19977/invocations
 
 /**
- * Synthesizes speech from text using the specified voice, model, rate, return type, and audio format
+ * Synthesizes speech from text using the specified voice, model, rate, return type, audio format, and max words per sentence
  * @param {string} text - The text to convert to speech
  * @param {string} voice - The voice ID to use
  * @param {string} model - The model ID to use
  * @param {string} rate - The speed of the speech
  * @param {string} returnType - The return type (url or file)
  * @param {string} audioFormat - The audio format (wav or mp3)
- * @returns {Promise<{audioUrl: string, blob: Blob}>} - Audio URL and blob
+ * @param {number} maxWordPerSent - Maximum words per sentence
+ * @returns {Promise<{audioUrl: string, blob: Blob, normalizedText: string}>} - Audio URL, blob, and normalized text
  */
-export async function synthesize(text, voice, model, rate, returnType, audioFormat) {
-  console.log('TTS API called with:', { text, voice, model, rate, returnType, audioFormat });
+export async function synthesize(text, voice, model, rate, returnType, audioFormat, maxWordPerSent) {
+  console.log('TTS API called with:', { text, voice, model, rate, returnType, audioFormat, maxWordPerSent });
   
   // Use backend proxy instead of calling external API directly
   const API_URL = '/api/tts/synthesize';
@@ -24,7 +25,8 @@ export async function synthesize(text, voice, model, rate, returnType, audioForm
     sample_rate: parseInt(model) || 16000,
     accent: parseInt(voice) || 1,
     return_type: returnType || 'url',
-    audio_format: audioFormat || 'wav'
+    audio_format: audioFormat || 'wav',
+    max_word_per_sent: parseInt(maxWordPerSent) || 100
   };
   
   console.log('Request body:', requestBody);
@@ -50,9 +52,14 @@ export async function synthesize(text, voice, model, rate, returnType, audioForm
       // API returns JSON with base64-encoded waveform
       const data = await response.json();
       console.log('API Response status:', data.status, data.description);
+      console.log('Full API Response:', data);
+      console.log('Available keys:', Object.keys(data));
       
       // Extract the base64 waveform from the response
       const base64Waveform = data.audio;
+      const normalizedText = data.normed_text || '';
+      
+      console.log('Extracted normalizedText:', normalizedText);
       
       if (!base64Waveform) {
         console.error('Response data:', data);
@@ -69,12 +76,12 @@ export async function synthesize(text, voice, model, rate, returnType, audioForm
       // Create blob from binary data
       const blob = new Blob([bytes], { type: `audio/${audioFormat}` });
       const audioUrl = URL.createObjectURL(blob);
-      return { audioUrl, blob };
+      return { audioUrl, blob, normalizedText };
     } else {
       // return_type is 'file' - returns audio blob directly
       const blob = await response.blob();
       const audioUrl = URL.createObjectURL(blob);
-      return { audioUrl, blob };
+      return { audioUrl, blob, normalizedText: '' };
     }
   } catch (error) {
     console.error('Synthesis error:', error);
