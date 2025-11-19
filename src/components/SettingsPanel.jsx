@@ -157,7 +157,7 @@ function SettingsPanel({
         {/* Max Words Per Sentence Slider */}
         <div className="setting-group">
           <label className="setting-label">
-            Max Words Per Sentence: {setMaxWordPerSent}
+            Max Words Per Sentence: {maxWordPerSent}
           </label>
           <input
             type="range"
