@@ -101,6 +101,7 @@ export async function getRates() {
     { id: '0.8', name: '0.8x (Very Slow)' },
     { id: '0.9', name: '0.9x (Slow)' },
     { id: '1.0', name: '1.0x (Normal)' },
+    { id: '1.05', name: '1.05x (Slightly Fast)' },
     { id: '1.1', name: '1.1x (Fast)' },
     { id: '1.2', name: '1.2x (Very Fast)' },
   ];

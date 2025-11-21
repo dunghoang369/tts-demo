@@ -5,13 +5,16 @@ Reads articles_news.json, calls the summarize API for each article's full_text,
 and saves the summaries to summarized_news.json.
 """
 
+import re
 import json
 import time
 import requests
 from datetime import datetime
+import pandas as pd
 
 # API configuration
 SUMMARIZE_API_URL = "http://115.79.192.192:19977/summarize"
+GET_NEWS_API_URL = "http://115.79.192.192:19977/get_news"
 API_KEY = "zNBVyiatKn5eTvC2CEvDg1msgOCHrTZ55zZ0qfsu"
 
 # Category mapping based on article content
@@ -128,5 +131,48 @@ def main():
     print(f"✓ Saved to summarized_news.json")
 
 
+def get_news():
+    """Get news from the API"""
+    headers = {
+        "accept": "application/json",
+        "api-key": API_KEY,
+        "Content-Type": "application/json",
+    }
+
+    data = {"news_type": "thoi-su", "limit": 5}
+    response = requests.post(GET_NEWS_API_URL, headers=headers, json=data, timeout=120)
+    response.raise_for_status()
+    return response.json()
+
+
 if __name__ == "__main__":
-    main()
+    # main()
+    news = get_news()
+    results = news.get("results", [])
+
+    for result in results["articles"]:
+        title = result.get("title", "")
+        publish_datetime = result.get("publish_time", "")
+
+        # Extract date in format DD/MM/YYYY and convert to YYYY-MM-DD
+        date_match = re.search(r"(\d{2})/(\d{2})/(\d{4})", publish_datetime)
+        publish_date = (
+            f"{date_match.group(3)}-{date_match.group(2)}-{date_match.group(1)}"
+            if date_match
+            else ""
+        )
+
+        # Extract time in format HH:MM
+        time_match = re.search(r"(\d{2}):(\d{2})", publish_datetime)
+        publish_time = (
+            f"{time_match.group(1)}:{time_match.group(2)}" if time_match else ""
+        )
+        full_text = result.get("full_text", "")
+        date_time = pd.to_datetime(f"{publish_date} {publish_time}")
+        print(f"Title: {title}")
+        print(f"Full text: {full_text}")
+        print("-" * 100)
+
+        import pdb
+
+        pdb.set_trace()
